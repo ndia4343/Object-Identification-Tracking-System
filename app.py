@@ -24,7 +24,11 @@ with st.sidebar:
     speed_limit_kmh = st.number_input("Speed Limit Threshold (km/h)", value=60)
     conf_threshold = st.slider("Object Detection Confidence", 0.1, 1.0, 0.40)
 
-uploaded_file = st.file_uploader("Upload Video File (MP4 format optimally)", type=["mp4", "avi", "mov"])
+video_source = st.radio("Select Video Input Source", ("Upload Video File", "Use Default Demo Traffic Video (YouTube)"))
+
+uploaded_file = None
+if video_source == "Upload Video File":
+    uploaded_file = st.file_uploader("Upload Video File (MP4 format optimally)", type=["mp4", "avi", "mov"])
 
 @st.cache_resource
 def load_model():
@@ -32,18 +36,28 @@ def load_model():
 
 model = load_model()
 
-if uploaded_file is not None:
-    st.info("File verification successful. Proceeding to initialize deep learning tracking protocol.")
+if video_source == "Use Default Demo Traffic Video (YouTube)" or uploaded_file is not None:
+    if video_source == "Use Default Demo Traffic Video (YouTube)":
+        st.info("Demo mode initialized. Ready to download and process YouTube traffic video.")
+    else:
+        st.info("File verification successful. Proceeding to initialize deep learning tracking protocol.")
     
     if st.button("Initialize Processing"):
         tfile = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
-        # Process video writing dynamically to save RAM for 2GB+ files
-        uploaded_file.seek(0)
-        while True:
-            chunk = uploaded_file.read(10 * 1024 * 1024)  # 10MB chunks
-            if not chunk:
-                break
-            tfile.write(chunk)
+        
+        if video_source == "Use Default Demo Traffic Video (YouTube)":
+            import yt_dlp
+            with st.spinner("Downloading YouTube video locally for inference..."):
+                ydl_opts = {'format': 'best[ext=mp4]', 'outtmpl': tfile.name}
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download(['https://www.youtube.com/watch?v=wqctLW0Hb_0'])
+        else:
+            uploaded_file.seek(0)
+            while True:
+                chunk = uploaded_file.read(10 * 1024 * 1024)
+                if not chunk:
+                    break
+                tfile.write(chunk)
         tfile.close()
 
         cap = cv2.VideoCapture(tfile.name)
