@@ -1,4 +1,4 @@
-# Object Detection and Tracking (Traffic Speed Enforcement)
+# Object Identification & Tracking (Traffic Speed Enforcement):
 
 ## Overview
 This repository contains a professional-grade traffic speed enforcement application. It utilizes state-of-the-art YOLO-based object detection and tracking to monitor vehicular traffic, calculate estimated speeds across predefined geographical thresholds, and issue virtual e-challans for vehicles exceeding the specified speed limits.
