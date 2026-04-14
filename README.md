@@ -88,3 +88,28 @@ traffic-surveillance-ai/
 ├── .gitignore               # Excludes large binaries and caches
 └── README.md                # Project documentation
 ```
+### 🎥 Produced Evidence
+- **File:** `data/output/echallan_evidence.mp4`
+- **Description:** A high-definition reconstructed video featuring the YOLOv8 annotation layer, persistent tracking IDs, and real-time speed violation "CHALLAN" HUD overlays.
+
+> 📺 **[Watch the Full Demo & Raw Output on YouTube](https://youtu.be/d_OVW6mwGVc)**
+
+### Getting Started 
+📁 Project Output
+🎥 Produced Evidence
+Input Video (Raw):
+data/input/traffic_sample.mp4
+➜ Original unprocessed traffic footage used as input
+Processed Video (E-Challan Output):
+data/output/echallan_evidence.mp4
+➜ YOLOv8 annotated video with tracking IDs + speed violation overlays
+Violation Report (CSV):
+data/output/violations_report.csv
+➜ Structured log of detected speed violations (vehicle ID, speed, timestamp, penalty status)
+
+ #### Install Dependencies 
+   ```bash
+   pip install -r requirements.txt 
+
+ Run the Engine 
+   python src/main.py
